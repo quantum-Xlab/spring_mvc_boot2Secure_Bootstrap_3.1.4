@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        BODY {
+            background: white;
+        }
+        DIV {
+            margin-left: auto;
+            margin-right: auto;
+            justify-content: center;
+
+        }
+        TABLE {
+            border-collapse: collapse;
+            border: 2px solid white;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        TD, TH {
+            padding: 3px;
+            border: 1px solid  #167997;
+            text-align: left;
+
+        }
+    </style>
+</head>
+<body>
+<div >
+    <p style="text-align: center"><b>USERS DATABASE ADMINISTRATION</b> </p>
+    <table >
+        <tr>
+            <th style="text-align: center">User Id</th>
+            <th style="text-align: center">User name</th>
+            <th style="text-align: center">User password</th>
+            <th style="text-align: center">User roles</th>
+            <th style="text-align: center">Del</th>
+            <th style="text-align: center">Edit</th>
+        </tr>
+        <tr sec:authorize="hasRole('ADMIN')" th:each ="user : ${users}">
+            <td style="text-align:center" th:utext="${user.getUserId()}">...</td>
+            <td style="text-align:center" th:utext="${user.getUsername()}">...</td>
+            <td style="text-align:center" th:utext="${user.getPassword()}">...</td>
+            <td style="text-align:center" th:utext="${user.rolesToString()}" >...</td>
+
+            <td><button name="del" form="delForm" type="submit"  th:value="${user.getUserId()}">X</button></td>
+            <td><button name="editUser" form="editForm" type="submit"  th:value="${user.getUsername()}">Edit</button></td>
+        </tr>
+    </table>
+    <br>
+    <div th:align="center">
+    <form method="POST" id="create" action="/admin" >
+        <p><b>Add new user</b></p>
+        <label for="user_name" style="display: inline-block; width: 70px">Name</label>
+        <input name="user_name" type="text" id="user_name">
+        <br>
+        <label for="password" style="display: inline-block; width: 70px">Password</label>
+        <input name="password" type="text" id="password"> <br>
+        <br>
+        <input type="checkbox" id="roles" name="roles" value="ROLE_USER">
+        <label for="roles" style="display: inline-block; width: 70px"> USER (default)</label>
+        <input type="checkbox" id="roles2" name="roles" value="ROLE_ADMIN">
+        <label for="roles2" style="display: inline-block; width: 70px"> ADMIN </label>
+        <input type="checkbox" id="roles3" name="roles" value="ROLE_CREATOR">
+        <label for="roles3" style="display: inline-block; width: 70px"> CREATOR </label><br>
+        <br>
+        <input type="submit" value="Add user">
+    </form>
+        </div>
+    <br/>
+    <div th:align="center">
+    <input form="logout" type="submit" value="Logout" >
+    <form id="logout" th:action="@{/logout}" method="post">
+    </form>
+    </div>
+    <form id="delForm" method="POST" action="/delete">
+    </form>
+
+    <form id="editForm" method="GET" action="/admin/edit">
+    </form>
+
+
+</div>
+</body>
+</html>
