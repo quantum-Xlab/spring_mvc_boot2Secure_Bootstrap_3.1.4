@@ -2,7 +2,6 @@ package com.sekin.spring.spring_mvc_boot2Secure.model;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-
 import java.util.Set;
 
 @Entity

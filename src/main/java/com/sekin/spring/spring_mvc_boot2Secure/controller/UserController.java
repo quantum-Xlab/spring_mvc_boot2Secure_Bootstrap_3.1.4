@@ -1,9 +1,9 @@
 package com.sekin.spring.spring_mvc_boot2Secure.controller;
 
+import com.sekin.spring.spring_mvc_boot2Secure.model.Role;
 import com.sekin.spring.spring_mvc_boot2Secure.model.User;
 import com.sekin.spring.spring_mvc_boot2Secure.repository.UsersRepo;
-import com.sekin.spring.spring_mvc_boot2Secure.service.UserServiceImpl;
-
+import com.sekin.spring.spring_mvc_boot2Secure.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -11,27 +11,31 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
     private final UsersRepo usersRepo;
 
 
-    public UserController(UserServiceImpl userService, UsersRepo usersRepo) {
+    public UserController(UserService userService, UsersRepo usersRepo) {
         this.userService = userService;
         this.usersRepo = usersRepo;
     }
 
     @GetMapping(value = "/")
     public String printUsers() {
+        Set<Role> role = new HashSet<>();
+        role.add(new Role("ROLE_ADMIN"));
+        role.add(new Role("ROLE_USER"));
         //Для демонстрации создаем нового рута при входе
         if (usersRepo.findByUsername("root").isEmpty()) {
             User user = new User("root", "root");
-            userService.saveUser(user, "ROLE_ADMIN");
+            userService.saveUser(user, role);
         }
         return "redirect:/admin";
     }

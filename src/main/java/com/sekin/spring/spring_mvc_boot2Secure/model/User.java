@@ -6,8 +6,6 @@ import org.hibernate.annotations.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-
 import java.util.*;
 
 
@@ -33,7 +31,7 @@ public class User implements UserDetails {
     @JoinTable(name = "users_with_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
 
@@ -41,7 +39,6 @@ public class User implements UserDetails {
 
     public User(String userName, String password) {
         this.userName = userName;
-
         this.password = password;
     }
 

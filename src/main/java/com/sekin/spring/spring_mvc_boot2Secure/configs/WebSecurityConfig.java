@@ -1,5 +1,6 @@
 package com.sekin.spring.spring_mvc_boot2Secure.configs;
 
+import com.sekin.spring.spring_mvc_boot2Secure.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -10,7 +11,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,20 +22,19 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
-    private final UserDetailsService userDetailsService;
+    private final UserService userService;
     private final AuthenticationSuccessHandler successUserHandler;
 
-    public WebSecurityConfig(UserDetailsService userDetailsService,
+    public WebSecurityConfig(UserService userService,
                              AuthenticationSuccessHandler authenticationSuccessHandler) {
-        this.userDetailsService = userDetailsService;
+        this.userService = userService;
         this.successUserHandler = authenticationSuccessHandler;
     }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-
+        provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(bCryptPasswordEncoder());
         return provider;
     }

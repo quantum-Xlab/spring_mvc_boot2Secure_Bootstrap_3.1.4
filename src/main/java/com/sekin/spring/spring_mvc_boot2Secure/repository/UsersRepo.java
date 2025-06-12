@@ -2,7 +2,6 @@ package com.sekin.spring.spring_mvc_boot2Secure.repository;
 
 import com.sekin.spring.spring_mvc_boot2Secure.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
