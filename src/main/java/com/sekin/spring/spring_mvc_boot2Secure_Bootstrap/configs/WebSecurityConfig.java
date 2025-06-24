@@ -1,6 +1,6 @@
-package com.sekin.spring.spring_mvc_boot2Secure.configs;
+package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.configs;
 
-import com.sekin.spring.spring_mvc_boot2Secure.service.UserService;
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;

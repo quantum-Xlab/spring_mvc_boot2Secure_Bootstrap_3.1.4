@@ -1,4 +1,4 @@
-package com.sekin.spring.spring_mvc_boot2Secure.model;
+package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model;
 
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
@@ -16,6 +16,15 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
+
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
+    @Column(name = "age")
+    private Integer age;
 
     @Column(name = "user_name")
     private String userName;
@@ -37,15 +46,28 @@ public class User implements UserDetails {
 
     }
 
-    public User(String userName, String password) {
+    public User(String userName, String password, String firstName, String lastName, Integer age) {
         this.userName = userName;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+
+
     }
 
     public Long getUserId() {
         return this.id;
     }
-
+    public String getFirstName() {
+        return this.firstName;
+    }
+    public String getLastName() {
+        return this.lastName;
+    }
+    public Integer getUserAge() {
+        return this.age;
+    }
 
     public void setUsername(String userName) {
         this.userName = userName;
@@ -98,6 +120,16 @@ public class User implements UserDetails {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
 
     public Set<Role> getRoles() {
         return roles;

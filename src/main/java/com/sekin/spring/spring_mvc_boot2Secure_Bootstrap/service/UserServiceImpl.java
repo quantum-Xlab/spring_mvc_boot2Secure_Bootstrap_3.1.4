@@ -1,9 +1,9 @@
-package com.sekin.spring.spring_mvc_boot2Secure.service;
+package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.service;
 
-import com.sekin.spring.spring_mvc_boot2Secure.model.Role;
-import com.sekin.spring.spring_mvc_boot2Secure.model.User;
-import com.sekin.spring.spring_mvc_boot2Secure.repository.RolesRepo;
-import com.sekin.spring.spring_mvc_boot2Secure.repository.UsersRepo;
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model.Role;
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model.User;
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.repository.RolesRepo;
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.repository.UsersRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -65,7 +65,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void update(String userName, String newName,
-                       String newPassword, String... newRoles) {
+                       String newPassword, String newFirstName, String newLastName,
+                       Integer age, String... newRoles) {
         User updUser = (User) loadUserByUsername(userName);
         Set<Role> role;
         if (!newName.isBlank()) {
@@ -73,6 +74,15 @@ public class UserServiceImpl implements UserService {
         }
         if (!newPassword.isBlank()) {
             updUser.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+        }
+        if (!newFirstName.isBlank()) {
+            updUser.setFirstName(newFirstName);
+        }
+        if (!newFirstName.isBlank()) {
+            updUser.setLastName(newLastName);
+        }
+        if (age!=null) {
+            updUser.setAge(age);
         }
         if (newRoles.length > 0) {
             role = new HashSet<>();

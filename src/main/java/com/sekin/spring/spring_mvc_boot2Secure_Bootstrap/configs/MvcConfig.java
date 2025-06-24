@@ -1,4 +1,4 @@
-package com.sekin.spring.spring_mvc_boot2Secure.configs;
+package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.configs;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -11,6 +11,5 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/admin").setViewName("admin");
         registry.addViewController("/user").setViewName("user");
-        registry.addViewController("/admin/edit").setViewName("edit");
     }
 }
