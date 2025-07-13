@@ -52,9 +52,6 @@ public class UserController {
     @GetMapping(value = "/user")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public String infoUser(Authentication authentication, ModelMap model) {
-/*        User user = (User) authentication.getPrincipal();
-        model.addAttribute("user", user);
-        return "/admin";*/
         return printUsers(model, authentication);
     }
 }

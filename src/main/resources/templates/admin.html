@@ -25,8 +25,10 @@
             <!--sec:authentication="name"-->
             <span id="navName"></span></b>
         <span class="navbar-brand" id="userRoles"
-              th:utext="' with roles: ' + ${user.rolesToString()}"></span>
-
+              ></span>
+<!--
+        th:utext="' with roles: ' + ${user.rolesToString()}"
+-->
         <div class="collapse navbar-collapse show" id="navbarDark">
             <ul class="navbar-nav ms-auto mb-2 mb-xl-0">
                 <li class="nav-item">
@@ -186,15 +188,7 @@
                                         </tr>
                                         </thead>
                                         <tbody id="user-table-row">
-                     <!--                   <tr sec:authorize="hasRole('USER')">
-                                            <td style="text-align:center" th:utext="${user.getUserId()}">...</td>
-                                            <td style="text-align:center" th:utext="${user.getFirstName()}">...</td>
-                                            <td style="text-align:center" th:utext="${user.getLastName()}">...</td>
-                                            <td style="text-align:center" th:utext="${user.getUserAge()}">...</td>
-                                            <td style="text-align:center" th:utext="${user.getUsername()}">...</td>
-                                            <td style="text-align:center" th:utext="${user.rolesToString()}">...
-                                            </td>
-                                        </tr>-->
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -357,7 +351,10 @@
 
     function navName() {
         fetch('/admin/user').then(function (response) {
-            response.json().then(user => document.getElementById('navName').innerText = user.user_name);
+            response.json().then(user => {document.getElementById('navName').innerText = user.user_name;
+            document.getElementById('userRoles').innerText=user.roles.map(role => " "+role.name.replaceAll("ROLE_", ""));
+            }
+            );
 
         })
         getUser();
@@ -435,7 +432,7 @@
         row.insertCell()
             .appendChild(document.createTextNode(user.user_name));
         row.insertCell()
-            .appendChild(document.createTextNode(user.roles.map(role => role.name)));
+            .appendChild(document.createTextNode(user.roles.map(role => " "+role.name.replaceAll("ROLE_", ""))));
         row.insertCell().appendChild(editButt);
         row.insertCell().appendChild(deleteButt);
         editButt.setAttribute('usrname', user.user_name);
@@ -458,7 +455,7 @@
         row.insertCell()
             .appendChild(document.createTextNode(user.user_name));
         row.insertCell()
-            .appendChild(document.createTextNode(user.roles.map(role => role.name)));
+            .appendChild(document.createTextNode(user.roles.map(role => " "+role.name.replaceAll("ROLE_", ""))));
     }
 
     document.getElementById('myModal').addEventListener('show.bs.modal', function (e) {
