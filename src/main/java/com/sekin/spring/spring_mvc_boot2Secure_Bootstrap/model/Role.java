@@ -1,5 +1,7 @@
 package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import java.util.Set;
@@ -17,6 +19,8 @@ public class Role implements GrantedAuthority {
     private User user;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
+
     private Set<User> users;
 
     public void setUser(User user) {

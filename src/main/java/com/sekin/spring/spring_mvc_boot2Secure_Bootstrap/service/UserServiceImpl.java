@@ -42,20 +42,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void saveUser(User user, String... roles) {
+    public User saveUser(User user, String... roles) {
         Stream.of(roles).forEach(x -> user.addRole(rolesRepo.findByName(x)));
         Stream.of(roles).forEach(x ->
                 rolesRepo
                 .findByName(x)
                 .setUsers(Collections.singleton(user)));
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        usersRepo.save(user);
+
+        return usersRepo.save(user);
     }
 
     //Оставим для создания рута
     @Override
     @Transactional
-    public void saveUser(User user, Set<Role> roles) {
+    public void saveUsera(User user, Set<Role> roles) {
         user.setRoles(roles);
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         usersRepo.save(user);
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(String userName, String newName,
+    public User update(String userName, String newName,
                        String newPassword, String newFirstName, String newLastName,
                        Integer age, String... newRoles) {
         User updUser = (User) loadUserByUsername(userName);
@@ -90,6 +91,7 @@ public class UserServiceImpl implements UserService {
             updUser.setRoles(role);
         }
         usersRepo.save(updUser);
+        return updUser;
     }
 
     @Override

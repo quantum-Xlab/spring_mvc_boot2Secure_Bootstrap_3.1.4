@@ -22,7 +22,8 @@
 <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
     <div class="container-fluid ">
         <b class="navbar-brand">
-            <span sec:authentication="name"></span></b>
+            <!--sec:authentication="name"-->
+            <span id="navName"></span></b>
         <span class="navbar-brand" id="userRoles"
               th:utext="' with roles: ' + ${user.rolesToString()}"></span>
 
@@ -90,159 +91,9 @@
                                                 <th scope="col" style="text-align: center">Delete</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr sec:authorize="hasRole('ADMIN')" th:each="user : ${users}">
-                                                <td style="text-align:center" th:utext="${user.getUserId()}">...</td>
-                                                <td style="text-align:center" th:utext="${user.getFirstName()}">...</td>
-                                                <td style="text-align:center" th:utext="${user.getLastName()}">...</td>
-                                                <td style="text-align:center" th:utext="${user.getUserAge()}">...</td>
-                                                <td style="text-align:center" th:utext="${user.getUsername()}">...</td>
-                                                <td style="text-align:center" th:utext="${user.rolesToString()}">...
-                                                </td>
-                                                <td style="text-align: center">
-
-                                                    <button id="editButt" type="button" class="btn btn-primary"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModal"
-                                                            th:data-bs-userid="${user.getUserId()}"
-                                                            th:data-bs-userfname="${user.getFirstName()}"
-                                                            th:data-bs-userlname="${user.getLastName()}"
-                                                            th:data-bs-userage="${user.getUserAge()}"
-                                                            th:data-bs-username="${user.getUsername()}"
-                                                            th:data-bs-userroles="${user.rolesToString()}"> Edit
-                                                    </button>
-                                                </td>
-                                                <td style="text-align: center">
-                                                    <button id="delete" type="button" class="btn btn-danger"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#myModal"
-                                                            th:data-bs-userid="${user.getUserId()}"
-                                                            th:data-bs-userfname="${user.getFirstName()}"
-                                                            th:data-bs-userlname="${user.getLastName()}"
-                                                            th:data-bs-userage="${user.getUserAge()}"
-                                                            th:data-bs-username="${user.getUsername()}"
-                                                            th:data-bs-userroles="${user.rolesToString()}"> Delete
-                                                    </button>
+                                            <tbody id="users-table-rows">
 
 
-                                                    <!-- Modal -->
-                                                    <form id="editForm1" method="POST" action="/admin/edit">
-
-                                                        <div class="modal fade" th:id="myModal" tabindex="-1"
-                                                             aria-labelledby="myModalLabel" aria-hidden="true"
-                                                             data-bs-backdrop="static" data-bs-keyboard="false"
-                                                             role="document">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content ">
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="myModalLabel">
-                                                                        </h5>
-                                                                        <p type="button" class="close ms-auto"
-                                                                           data-bs-dismiss="modal"
-                                                                           aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="modal-body mx-auto">
-
-                                                                        <div sec:authorize="hasRole('ADMIN')"
-                                                                             style="align-items: center">
-                                                                            <input id="mainUserName" th:type="hidden"
-                                                                                   th:name="userName"
-                                                                                   class="form-control"
-                                                                                   type="text"
-                                                                                   aria-label=".form-control-sm">
-
-                                                                            <label for="modalId"
-                                                                                   style="display: inline-block;  ">ID</label>
-                                                                            <input id="modalId"
-                                                                                   disabled class="form-control"
-                                                                                   type="text"
-                                                                                   aria-label=".form-control">
-                                                                            <br>
-                                                                            <label for="modalFirstName"
-                                                                                   style="display: inline-block; ">First
-                                                                                name</label>
-                                                                            <input id="modalFirstName"
-                                                                                   name="newFirstName"
-                                                                                   class="form-control"
-                                                                                   type="text"
-                                                                                   aria-label=".form-control-sm"
-                                                                                   required>
-                                                                            <br>
-                                                                            <label for="modalLastName"
-                                                                                   style="display: inline-block;">Last
-                                                                                name</label>
-                                                                            <input id="modalLastName"
-                                                                                   name="newLastName"
-                                                                                   class="form-control"
-                                                                                   type="text"
-                                                                                   aria-label=".form-control-sm"
-                                                                                   required>
-                                                                            <br>
-                                                                            <label for="modalAge"
-                                                                                   style="display: inline-block; ">Age</label>
-                                                                            <input id="modalAge"
-                                                                                   name="newAge"
-                                                                                   class="form-control"
-                                                                                   type="number"
-                                                                                   aria-label=".form-control-sm"
-                                                                                   required>
-                                                                            <br>
-                                                                            <label for="modalUserName"
-                                                                                   style="display: inline-block;">Email</label>
-                                                                            <input id="modalUserName"
-                                                                                   name="newName"
-                                                                                   class="form-control needs-validation"
-                                                                                   type="email"
-                                                                                   aria-label=".form-control-sm"
-                                                                                   required>
-                                                                            <br>
-                                                                            <label id="modalPassLabel" for="modalPass"
-                                                                                   style="display: inline-block;">Password</label>
-                                                                            <input id="modalPass"
-                                                                                   name="newPassword"
-                                                                                   class="form-control"
-                                                                                   type="password"
-                                                                                   aria-label=".form-control-sm">
-                                                                            <br>
-                                                                            <p style="text-align: center">Role:</p>
-
-                                                                            <select class="form-select form-select-sm"
-                                                                                    id="modalRoles"
-                                                                                    name="roles" multiple
-                                                                                    aria-label="multiple select">
-                                                                                <option value="ROLE_ADMIN">ADMIN
-                                                                                </option>
-                                                                                <option value="ROLE_USER">USER</option>
-                                                                            </select>
-                                                                            <br/>
-
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer modal-dialog-right">
-                                                                        <button type="button" class="btn btn-secondary"
-                                                                                data-bs-dismiss="modal">Close
-                                                                        </button>
-                                                                        <button id="modalDeleteButton" name="del"
-                                                                                form="delForm" type="submit"
-                                                                                class="btn btn-danger"
-                                                                                th:value="${user.getUserId()}">
-                                                                            Delete
-                                                                        </button>
-                                                                        <button id="modalEditButton" type="submit"
-                                                                                class="btn btn-primary">
-                                                                            Edit
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </form>
-                                                </td>
-
-                                            </tr>
                                             </tbody>
 
                                         </table>
@@ -302,7 +153,8 @@
                                                     <option value="ROLE_USER">USER</option>
                                                 </select>
                                             </div>
-                                            <input class="btn btn-success" style="margin: 20px" type="submit"
+                                            <input class="btn btn-success" id="addbut" style="margin: 20px"
+                                                   type="submit"
                                                    value="Add new user">
                                             <br>
                                         </form>
@@ -333,8 +185,8 @@
                                             <th scope="col" style="text-align: center">Role</th>
                                         </tr>
                                         </thead>
-                                        <tbody>
-                                        <tr sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                                        <tbody id="user-table-row">
+                     <!--                   <tr sec:authorize="hasRole('USER')">
                                             <td style="text-align:center" th:utext="${user.getUserId()}">...</td>
                                             <td style="text-align:center" th:utext="${user.getFirstName()}">...</td>
                                             <td style="text-align:center" th:utext="${user.getLastName()}">...</td>
@@ -342,7 +194,7 @@
                                             <td style="text-align:center" th:utext="${user.getUsername()}">...</td>
                                             <td style="text-align:center" th:utext="${user.rolesToString()}">...
                                             </td>
-                                        </tr>
+                                        </tr>-->
                                         </tbody>
                                     </table>
                                 </div>
@@ -363,7 +215,126 @@
     <form id="delForm" method="POST" action="/delete">
     </form>
 
+
+    <!-- Modal -->
+    <form id="editForm1" method="POST" action="/admin/update">
+
+        <div class="modal fade" id="myModal" tabindex="-1"
+             aria-labelledby="myModalLabel" aria-hidden="true"
+             data-bs-backdrop="static" data-bs-keyboard="false" style="display: none;"
+             role="document">
+            <div class="modal-dialog">
+                <div class="modal-content ">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="myModalLabel">
+                        </h5>
+                        <p type="button" class="close ms-auto"
+                           data-bs-dismiss="modal"
+                           aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </p>
+                    </div>
+                    <div class="modal-body mx-auto">
+
+                        <div sec:authorize="hasRole('ADMIN')"
+                             style="align-items: center">
+                            <input id="mainUserName" th:type="hidden"
+                                   th:name="userName"
+                                   class="form-control"
+                                   type="text"
+                                   aria-label=".form-control-sm">
+
+                            <label for="modalId"
+                                   style="display: inline-block;  ">ID</label>
+                            <input id="modalId"
+                                   disabled class="form-control"
+                                   type="text"
+                                   aria-label=".form-control">
+                            <br>
+                            <label for="modalFirstName"
+                                   style="display: inline-block; ">First
+                                name</label>
+                            <input id="modalFirstName"
+                                   name="newFirstName"
+                                   class="form-control"
+                                   type="text"
+                                   aria-label=".form-control-sm"
+                                   required>
+                            <br>
+                            <label for="modalLastName"
+                                   style="display: inline-block;">Last
+                                name</label>
+                            <input id="modalLastName"
+                                   name="newLastName"
+                                   class="form-control"
+                                   type="text"
+                                   aria-label=".form-control-sm"
+                                   required>
+                            <br>
+                            <label for="modalAge"
+                                   style="display: inline-block; ">Age</label>
+                            <input id="modalAge"
+                                   name="newAge"
+                                   class="form-control"
+                                   type="number"
+                                   aria-label=".form-control-sm"
+                                   required>
+                            <br>
+                            <label for="modalUserName"
+                                   style="display: inline-block;">Email</label>
+                            <input id="modalUserName"
+                                   name="newName"
+                                   class="form-control needs-validation"
+                                   type="email"
+                                   aria-label=".form-control-sm"
+                                   required>
+                            <br>
+                            <label id="modalPassLabel" for="modalPass"
+                                   style="display: inline-block;">Password</label>
+                            <input id="modalPass"
+                                   name="newPassword"
+                                   class="form-control"
+                                   type="password"
+                                   aria-label=".form-control-sm">
+                            <br>
+                            <p style="text-align: center">Role:</p>
+
+                            <select class="form-select form-select-sm"
+                                    id="modalRoles"
+                                    name="roles" multiple
+                                    aria-label="multiple select">
+                                <option value="ROLE_ADMIN">ADMIN
+                                </option>
+                                <option value="ROLE_USER">USER</option>
+                            </select>
+                            <br/>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer modal-dialog-right">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">Close
+                        </button>
+                        <button id="modalDeleteButton" name="del"
+                                form="delForm" type="submit"
+                                class="btn btn-danger"
+                                th:value="${user.getUserId()}">
+                            Delete
+                        </button>
+                        <button id="modalEditButton" type="submit"
+                                class="btn btn-primary" data-bs-dismiss="modal">
+                            Edit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+    <!-- //Modal -->
 </div>
+
+
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
@@ -376,11 +347,119 @@
         integrity="sha384-RuyvpeZCxMJCqVUGFI0Do1mQrods/hhxYlcVfGPOfQtPJh0JCw12tUAZ/Mv10S7D"
         crossorigin="anonymous"></script>
 
-
 <script>
+    const usersTableId = document.getElementById("users-table-rows");
+    const userTableId = document.getElementById("user-table-row");
 
-    const myModal = document.getElementById('myModal');
-    myModal.addEventListener('show.bs.modal', function (e) {
+    navName();
+    getAllUsers();
+    getUser();
+
+    function navName() {
+        fetch('/admin/user').then(function (response) {
+            response.json().then(user => document.getElementById('navName').innerText = user.user_name);
+        })
+    }
+
+    function getAllUsers() {
+        usersTableId.innerText = '';
+        fetch('/admin/users').then(function (response) {
+            response.json().then(users => {
+                users.forEach(user => {
+                    _appendUserRow(user);
+                });
+            });
+        });
+    }
+
+    function getUser() {
+        fetch('/admin/user').then(function (response) {
+                response.json().then(function (user) {
+                    userTableId.innerHTML = '';
+                    _appendUser(user)
+                });
+            }
+        )
+    }
+
+
+    function _appendUserRow(user) {
+
+        const editButAttributes = {
+            id: "editButt",
+            type: "button",
+            class: "btn btn-primary",
+            "data-bs-toggle": "modal",
+            "data-bs-target": "#myModal"
+        };
+
+        const deleteButAttributes = {
+            id: "delete",
+            type: "button",
+            class: "btn btn-danger",
+            "data-bs-toggle": "modal",
+            "data-bs-target": "#myModal"
+        };
+
+        const editButt = document.createElement("button");
+        editButt.innerText = "Edit";
+        for (const key in editButAttributes) {
+            if (editButAttributes.hasOwnProperty(key)) {
+                editButt.setAttribute(key, editButAttributes[key]);
+            }
+        }
+
+
+        const deleteButt = document.createElement("button");
+        deleteButt.innerText = "Delete";
+        for (const key in deleteButAttributes) {
+            if (deleteButAttributes.hasOwnProperty(key)) {
+                deleteButt.setAttribute(key, deleteButAttributes[key]);
+            }
+        }
+
+        const row = usersTableId.insertRow();
+        row.setAttribute("style", "text-align: center")
+        row.setAttribute("sec:authorize", "hasRole('ADMIN')");
+        row.setAttribute("id", "row" + user.userId);
+        row.insertCell()
+            .appendChild(document.createTextNode(user.userId));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.firstName));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.lastName));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.userAge));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.user_name));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.roles.map(role => role.name)));
+        row.insertCell().appendChild(editButt);
+        row.insertCell().appendChild(deleteButt);
+        editButt.setAttribute('usrname', user.user_name);
+        deleteButt.setAttribute('usrname', user.user_name);
+    }
+
+    function _appendUser(user) {
+        const row = userTableId.insertRow();
+        row.setAttribute("style", "text-align: center")
+        row.setAttribute("sec:authorize", "hasAnyRole('ADMIN', 'USER')");
+        row.setAttribute("id", "row" + user.userId);
+        row.insertCell()
+            .appendChild(document.createTextNode(user.userId));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.firstName));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.lastName));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.userAge));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.user_name));
+        row.insertCell()
+            .appendChild(document.createTextNode(user.roles.map(role => role.name)));
+    }
+
+    document.getElementById('myModal').addEventListener('show.bs.modal', function (e) {
         const but = e.relatedTarget;
 
         const modalLabel = document.getElementById('myModalLabel');
@@ -393,25 +472,15 @@
         const modalPass = document.getElementById('modalPass');
         const modalRoles = document.getElementById('modalRoles');
 
-        mainUserName.value = but.getAttribute('data-bs-username');
-        modalId.value = but.getAttribute('data-bs-userid');
-        modalFirstName.value = but.getAttribute('data-bs-userfname');
-        modalLastName.value = but.getAttribute('data-bs-userlname');
-        modalAge.value = but.getAttribute('data-bs-userage');
-        modalUserName.value = but.getAttribute('data-bs-username');
-        modalPass.value = but.getAttribute('data-bs-userpas');
-        modalRoles.value = but.getAttribute('data-bs-userroles');
-
         let elDis;
 
-        if (but.id === "editButt") {
+        if (but.innerText === 'Edit') {
             elDis = false;
             modalLabel.innerText = "Edit user";
             document.getElementById("modalEditButton").classList.add('d-block');
             document.getElementById("modalEditButton").classList.remove('d-none');
             document.getElementById("modalDeleteButton").classList.add('d-none');
             document.getElementById("modalDeleteButton").classList.remove('d-block');
-
         } else {
             elDis = true
             modalLabel.innerText = "Delete user";
@@ -429,8 +498,90 @@
         modalUserName.disabled = elDis;
         modalPass.disabled = elDis;
         modalRoles.disabled = elDis;
+
+        fetch('/admin/edit/' + but.getAttribute('usrname'))
+            .then(function (response) {
+                response.json().then(function (user) {
+
+                        mainUserName.value = user.user_name;
+                        modalId.value = user.userId;
+                        modalFirstName.value = user.firstName;
+                        modalLastName.value = user.lastName;
+                        modalAge.value = user.userAge;
+                        modalUserName.value = user.user_name;
+                    }
+                )
+            })
     })
 
+
+</script>
+
+
+<script>
+    const formNewUser = document.getElementById('create');
+
+    formNewUser.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formDataNew = new FormData(formNewUser);
+            fetch('/admin', {
+                method: 'POST',
+                body: formDataNew
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('nav-admin-tab').click();
+                    getAllUsers();
+                    document.getElementById('create').reset();
+                }
+            });
+        }
+    );
+</script>
+
+
+<script>
+    const form = document.getElementById('editForm1');
+
+    form.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            fetch('/admin/update', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    usersTableId.innerHTML = '';
+                    getAllUsers();
+                }
+            });
+        }
+    );
+</script>
+
+<script>
+    const form1 = document.getElementById('delForm');
+
+    form1.addEventListener('submit', function (event) {
+        event.preventDefault();
+        const delformData = new FormData();
+        delformData.append('del', document.getElementById('modalId').value);
+
+        fetch('/delete', {
+            method: 'POST',
+            body: delformData
+        }).then(response => {
+            if (response.ok) {
+                delRow('row' + document.getElementById('modalId').value)
+            }
+        });
+    });
+
+</script>
+
+<script>
+    function delRow(rowId) {
+        document.getElementById(rowId).remove();
+    }
 </script>
 
 </body>

@@ -1,5 +1,9 @@
 package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.*;
@@ -11,6 +15,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
+@JsonPropertyOrder({"user_id", "user_name", "password", "first_name", "last_name", "age"})
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +32,7 @@ public class User implements UserDetails {
     private Integer age;
 
     @Column(name = "user_name")
+    @JsonProperty("user_name")
     private String userName;
 
     @Column(name = "password")
@@ -34,6 +40,8 @@ public class User implements UserDetails {
 
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @JsonManagedReference
+
     //@LazyCollection(LazyCollectionOption.EXTRA)
     @Fetch(FetchMode.JOIN)
 
@@ -45,8 +53,9 @@ public class User implements UserDetails {
     public User() {
 
     }
+    @JsonCreator
+    public User(@JsonProperty(value = "user_name", required = true) String userName, String password, String firstName, String lastName, Integer age) {
 
-    public User(String userName, String password, String firstName, String lastName, Integer age) {
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -54,6 +63,17 @@ public class User implements UserDetails {
         this.age = age;
 
 
+    }
+
+
+
+    @Override
+    public String getUsername() {
+        return this.userName;
+    }
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     public Long getUserId() {
@@ -69,9 +89,7 @@ public class User implements UserDetails {
         return this.age;
     }
 
-    public void setUsername(String userName) {
-        this.userName = userName;
-    }
+
 
 
     @Override
@@ -86,15 +104,7 @@ public class User implements UserDetails {
         return authorities;
     }
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
 
-    @Override
-    public String getUsername() {
-        return this.userName;
-    }
 
     @Override
     public boolean isAccountNonExpired() {
@@ -116,7 +126,9 @@ public class User implements UserDetails {
         return true;
     }
 
-
+    public void setUsername(String userName) {
+        this.userName = userName;
+    }
     public void setPassword(String password) {
         this.password = password;
     }

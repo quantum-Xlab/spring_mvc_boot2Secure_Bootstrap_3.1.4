@@ -35,7 +35,7 @@ public class UserController {
         //Для демонстрации создаем нового рута при входе
         if (usersRepo.findByUsername("root").isEmpty()) {
             User user = new User("root@mail.ru", "root", "Den", "Sekin", 38);
-            userService.saveUser(user, role);
+            userService.saveUsera(user, role);
         }
         return "redirect:/admin";
     }
@@ -43,61 +43,18 @@ public class UserController {
     @GetMapping(value = "/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String printUsers(ModelMap model, Authentication authentication) {
-        List<User> users;
-        users = userService.listUsers();
         User user = (User) authentication.getPrincipal();
         model.addAttribute("user", user);
-        model.addAttribute("users", users);
         return "admin";
     }
 
-    @PostMapping(value = "/admin")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String newUser(@RequestParam(value = "user_name") String userName,
-                          @RequestParam(value = "password") String userPassword,
-                          @RequestParam(value = "firstName") String firstName,
-                          @RequestParam(value = "lastName") String lastName,
-                          @RequestParam(value = "age", required = false) Integer age,
-                          @RequestParam(value = "roles", required = false, defaultValue = "ROLE_USER") String... userRoles) {
-        User user = new User(userName, userPassword, firstName, lastName, age);
-        userService.saveUser(user, userRoles);
-        return "redirect:/admin";
-    }
-
-    @GetMapping(value = "/admin/edit")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String editUser(@RequestParam(value = "editUser") String userName, ModelMap model) {
-        User user = (User) userService.loadUserByUsername(userName);
-        model.addAttribute("user", user);
-        return "/admin";
-
-    }
-
-    @PostMapping(value = "/admin/edit")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String updateUser(@RequestParam(value = "userName", required = false) String userName,
-                             @RequestParam(value = "newName", required = false, defaultValue = "") String newName,
-                             @RequestParam(value = "newPassword", required = false, defaultValue = "") String password,
-                             @RequestParam(value = "newFirstName", required = false) String firstName,
-                             @RequestParam(value = "newLastName", required = false) String lastName,
-                             @RequestParam(value = "newAge", required = false) Integer age,
-                             @RequestParam(value = "roles", required = false, defaultValue = "") String... roles) {
-        userService.update(userName, newName, password, firstName, lastName, age, roles);
-        return "redirect:/admin";
-    }
-
-    @PostMapping(value = "/delete")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String deleteUser(@RequestParam(value = "del") Long id) {
-        userService.deleteById(id);
-        return "redirect:/admin";
-    }
 
     @GetMapping(value = "/user")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public String infoUser(Authentication authentication, ModelMap model) {
-        User user = (User) authentication.getPrincipal();
+/*        User user = (User) authentication.getPrincipal();
         model.addAttribute("user", user);
-        return "/admin";
+        return "/admin";*/
+        return printUsers(model, authentication);
     }
 }
