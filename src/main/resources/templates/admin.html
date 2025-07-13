@@ -353,12 +353,14 @@
 
     navName();
     getAllUsers();
-    getUser();
+
 
     function navName() {
         fetch('/admin/user').then(function (response) {
             response.json().then(user => document.getElementById('navName').innerText = user.user_name);
+
         })
+        getUser();
     }
 
     function getAllUsers() {
