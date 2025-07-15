@@ -1,6 +1,7 @@
 package com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.controller;
 
 
+import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model.Role;
 import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.model.User;
 import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.repository.UsersRepo;
 import com.sekin.spring.spring_mvc_boot2Secure_Bootstrap.service.UserService;
@@ -11,8 +12,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 public class UserRestController {
@@ -24,6 +28,29 @@ public class UserRestController {
     public UserRestController(UserService userService, UsersRepo usersRepo) {
         this.userService = userService;
         this.usersRepo = usersRepo;
+    }
+
+    @GetMapping(value = "/")
+    public ModelAndView loginPage(Authentication authentication, ModelMap modelMap) {
+        Set<Role> role = new HashSet<>();
+        role.add(new Role("ROLE_ADMIN"));
+        role.add(new Role("ROLE_USER"));
+        //Для демонстрации создаем нового рута при входе
+        if (usersRepo.findByUsername("root@mail.ru").isEmpty()) {
+            User user = new User("root@mail.ru", "root", "Den", "Sekin", 38);
+            userService.saveUsera(user, role);
+        }
+        return getAdminResponse(authentication, modelMap);
+    }
+
+    @GetMapping(value = {"/admin", "/user"})
+    public ModelAndView getAdminResponse(Authentication authentication, ModelMap model) {
+        ModelAndView modelAndView = new ModelAndView("admin");
+        User user = (User) authentication.getPrincipal();
+        modelAndView
+                .addObject("user", user)
+                .addObject(model);
+        return modelAndView;
     }
 
     @GetMapping(value = "/admin/users")
@@ -73,7 +100,7 @@ public void updateUser(@RequestParam(value = "userName", required = false) Strin
         return ResponseEntity.ok(user);
     }
 
-    @GetMapping(value = "/admin/user")
+    @GetMapping(value = {"/admin/user"})
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<User> infoUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
